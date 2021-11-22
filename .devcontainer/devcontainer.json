@@ -10,22 +10,32 @@
 	"settings": {
 		"sqltools.connections": [
 			{
-				"name": "Container database",
-				"driver": "PostgreSQL",
 				"previewLimit": 50,
 				"server": "localhost",
 				"port": 5432,
-				"database": "postgres",
+				"driver": "PostgreSQL",
+				"name": "twitter_clone",
+				"database": "twitter_clone",
 				"username": "postgres",
 				"password": "postgres"
 			}
-		]
+		],
+		"remote.containers.dotfiles.repository": "https://github.com/daniellaera/dotfiles.git",
+		"remote.containers.dotfiles.installCommand": "install.sh"
 	},
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"dbaeumer.vscode-eslint",
 		"mtxr.sqltools",
-		"mtxr.sqltools-driver-pg"
+		"mtxr.sqltools-driver-pg",
+		"prisma.prisma",
+		"mutantdino.resourcemonitor",
+		"eamodio.gitlens",
+		"wix.vscode-import-cost"
+	],
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [
+		5432
 	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [3000, 5432],
