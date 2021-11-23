@@ -20,8 +20,7 @@
 				"password": "postgres"
 			}
 		],
-		"remote.containers.dotfiles.repository": "https://github.com/daniellaera/dotfiles.git",
-		"remote.containers.dotfiles.installCommand": "install.sh"
+		"remote.containers.dotfiles.repository": "https://github.com/daniellaera/dotfiles.git"
 	},
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
