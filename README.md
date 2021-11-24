@@ -10,6 +10,12 @@ prisma migrate dev
 prisma db push
 ```
 
+Migrate in production environment like: Heroku
+
+change the DATABASE_URL in your .env file and then
+
+`prisma migrate deploy`
+
 Second, run the development server:
 
 ```bash
