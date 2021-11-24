@@ -9,8 +9,6 @@ export default function Page() {
   const { me } = useMe();
   if (!me) return null;
 
-  // const toggleDarkTheme = () => {
-
   return (
     <>
       {!me.username ? <SignupForm /> : null}

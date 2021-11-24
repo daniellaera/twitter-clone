@@ -1,7 +1,8 @@
-import jwt from "jsonwebtoken";
-import prisma from "../../lib/prisma";
+import jwt from 'jsonwebtoken';
+import { NextApiRequest, NextApiResponse } from 'next';
+import prisma from '../../lib/prisma';
 
-export default async (req, res) => {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { token } = req.cookies;
 
   if (token) {
@@ -11,4 +12,4 @@ export default async (req, res) => {
   } else {
     res.json({});
   }
-};
+}

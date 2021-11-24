@@ -1,13 +1,14 @@
-import jwt from "jsonwebtoken";
-import prisma from "../../../lib/prisma";
+import jwt from 'jsonwebtoken';
+import { NextApiRequest, NextApiResponse } from 'next';
+import prisma from '../../../lib/prisma';
 
-export default async (req, res) => {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { token } = req.cookies;
   const { text } = req.body;
 
   try {
     if (!text) {
-      res.json({ error: "You should type some text man!" });
+      res.json({ error: 'You should type some text man!' });
       return;
     }
     if (token) {
@@ -21,15 +22,14 @@ export default async (req, res) => {
               username
             }
           }
-        },
+        }
       });
       res.json(post);
     } else {
-      res.json({ error: "You must be logged in to post." });
+      res.json({ error: 'You must be logged in to post.' });
     }
-
   } catch (error) {
-    res.json({ error: "You must be logged in to post." });
+    res.json({ error: 'You must be logged in to post.' });
     return;
   }
 
@@ -37,10 +37,9 @@ export default async (req, res) => {
   //   // Get authenticated user
   //   const { _id, username } = jwt.verify(token, process.env.JWT_SECRET);
 
-
   //   if (!text) {
   //     res.json({ error: "You should type some text man!" });
-  //   } 
+  //   }
 
   //   const tweet = await prisma.tweet.create({
   //     data: { text, author: { connect: { username } } },
@@ -49,4 +48,4 @@ export default async (req, res) => {
   // } else {
   //   res.json({ error: "You must be logged in to tweet." });
   // }
-};
+}

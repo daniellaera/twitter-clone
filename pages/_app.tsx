@@ -1,4 +1,4 @@
-import { createTheme, CssBaseline, ThemeProvider, useTheme } from '@material-ui/core';
+import { createTheme, CssBaseline, ThemeProvider } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 
@@ -23,8 +23,6 @@ export default function App({ Component, pageProps }) {
       type: storageTheme
     }
   });
-
-  // typeof window !== 'undefined' ? localStorage.theme : 'light';
 
   const toggleDarkTheme = () => {
     let newPaletteType = theme.palette.type === 'dark' ? 'light' : 'dark';

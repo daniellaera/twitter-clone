@@ -1,12 +1,14 @@
-import prisma from "../../lib/prisma";
+import { NextApiRequest, NextApiResponse } from 'next';
+import prisma from '../../lib/prisma';
 
-export default async (req, res) => {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const posts = await prisma.post.findMany({
-    orderBy: { createdAt: "desc" },
+    orderBy: { createdAt: 'desc' },
     include: {
       author: {
         select: {
-          username: true, id: true
+          username: true,
+          id: true
         }
       },
       likes: {
@@ -14,7 +16,8 @@ export default async (req, res) => {
           id: true,
           author: {
             select: {
-              username: true, id: true
+              username: true,
+              id: true
             }
           }
         }
@@ -25,12 +28,13 @@ export default async (req, res) => {
           id: true,
           author: {
             select: {
-              username: true, id: true
+              username: true,
+              id: true
             }
           }
         }
       }
-    },
+    }
   });
   res.json(posts);
-};
+}
