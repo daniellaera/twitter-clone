@@ -43,8 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
       }
     },
     cardHovered: {
-      transition: 'transform 0.15s ease-in-out',
-      '&:hover': { cursor: 'pointer' }
+      transition: 'transform 0.80s ease-in-out'
     },
     avatar: {
       backgroundColor: red[500]
