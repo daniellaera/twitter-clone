@@ -11,7 +11,7 @@ export default function Page() {
 
   return (
     <>
-      {!me.username ? <SignupForm /> : null}
+      {!me.email ? <SignupForm /> : null}
       <CreatePostForm />
       <Post />
     </>

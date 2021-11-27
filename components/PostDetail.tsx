@@ -135,10 +135,10 @@ export const PostDetail = ({ pst, id, authorId }) => {
           <CardHeader
             avatar={
               <Avatar aria-label="recipe" className={classes.avatar}>
-                {truncate(pst.author.username)}
+                {truncate(pst.author.email)}
               </Avatar>
             }
-            title={'author: ' + pst.author.username}
+            title={'author: ' + pst.author.email}
             subheader={moment(pst.createdAt).format('Do MMMM YYYY')}
           />
           <CardContent>
@@ -192,7 +192,7 @@ export const PostDetail = ({ pst, id, authorId }) => {
                 text: input,
                 id
               });
-              if (!me || !me.username) {
+              if (!me || !me.email) {
                 setAlert(true);
                 setAlertMessage(error);
                 // message.error("You must be logged in to tweet.");
@@ -214,14 +214,14 @@ export const PostDetail = ({ pst, id, authorId }) => {
           <List className={classes.root} key={i}>
             <ListItem alignItems="flex-start">
               <ListItemAvatar>
-                <Avatar className={classes.commentsAvatar}>{truncate(author.username)}</Avatar>
+                <Avatar className={classes.commentsAvatar}>{truncate(author.email)}</Avatar>
               </ListItemAvatar>
               <ListItemText
                 primary={text}
                 secondary={
                   <React.Fragment>
                     <Typography component="span" variant="body2" className={classes.inline} color="textPrimary">
-                      {author.username}
+                      {author.email}
                     </Typography>
                   </React.Fragment>
                 }

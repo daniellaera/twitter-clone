@@ -41,7 +41,7 @@ export const Navbar = ({ variation, onChildClick }) => {
     <div className={classes.root}>
       <AppBar position="static" color="default">
         <Toolbar>
-          {!me.username ? (
+          {!me.email ? (
             <Typography variant="subtitle1" className={classes.title}>
               <Chip icon={<AccountCircleIcon />} label="Not logged in" color="secondary" variant="outlined" />
             </Typography>
@@ -49,7 +49,7 @@ export const Navbar = ({ variation, onChildClick }) => {
             <>
               <Typography variant="subtitle1" className={classes.title}>
                 <Tooltip title="Go to settings">
-                  <Chip icon={<FaceIcon />} label={me.username} clickable color="primary" />
+                  <Chip icon={<FaceIcon />} label={me.email} clickable color="primary" />
                 </Tooltip>
               </Typography>
               <LogoutButton />

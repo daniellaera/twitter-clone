@@ -101,10 +101,10 @@ export const Post = () => {
             <CardHeader
               avatar={
                 <Avatar aria-label="recipe" className={classes.avatar}>
-                  {truncate(author.username)}
+                  {truncate(author.email)}
                 </Avatar>
               }
-              title={'author: ' + author.username}
+              title={'author: ' + author.email}
               subheader={moment(createdAt).format('Do MMMM YYYY')}
             />
             <CardContent>

@@ -75,7 +75,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     include: {
       author: {
         select: {
-          username: true,
+          email: true,
           id: true
         }
       },
@@ -84,7 +84,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
           id: true,
           author: {
             select: {
-              username: true,
+              email: true,
               id: true
             }
           }
@@ -96,7 +96,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
           id: true,
           author: {
             select: {
-              username: true,
+              email: true,
               id: true
             }
           }

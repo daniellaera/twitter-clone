@@ -10,8 +10,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     if (token) {
       // Get authenticated user
-      const { username } = jwt.verify(token, process.env.JWT_SECRET);
-      const me = await prisma.user.findUnique({ where: { username } });
+      const { email } = jwt.verify(token, process.env.JWT_SECRET);
+      const me = await prisma.user.findUnique({ where: { email } });
 
       // find all likes for this post
       const allLikes = await prisma.like.findMany({
@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         data: {
           author: {
             connect: {
-              username
+              email
             }
           },
           post: {

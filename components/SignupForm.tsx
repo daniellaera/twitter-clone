@@ -55,7 +55,7 @@ export interface PasswordState {
 export const SignupForm = () => {
   const classes = useStyles();
   const [alertMessage, setAlertMessage] = useState('');
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [login, setLogin] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -95,8 +95,8 @@ export const SignupForm = () => {
           e.preventDefault();
           setLoading(true);
           try {
-            const { data, error } = await fetcher(`/api/${login ? 'login' : 'signup'}`, { username, password });
-            if ((username.length === 0 && login) || (password.length === 0 && login)) {
+            const { data, error } = await fetcher(`/api/${login ? 'login' : 'signup'}`, { email, password });
+            if ((email.length === 0 && login) || (password.length === 0 && login)) {
               setError(true);
               setLoading(false);
             } else if (error) {
@@ -117,7 +117,7 @@ export const SignupForm = () => {
           onClose={handleClose}
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
           <Alert onClose={handleClose} severity="error">
-            You cannot have a blank username or password 🙁
+            You cannot have a blank email or password 🙁
           </Alert>
         </Snackbar>
         <Snackbar
@@ -130,12 +130,12 @@ export const SignupForm = () => {
           </Alert>
         </Snackbar>
         <FormControl className={classes.margin}>
-          <InputLabel htmlFor="input-with-icon-adornment">Username</InputLabel>
+          <InputLabel htmlFor="input-with-icon-adornment">Email</InputLabel>
           <Input
             required
-            aria-label="Username"
-            value={username}
-            onChange={e => setUsername(e.target.value)}
+            aria-label="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
             startAdornment={
               <InputAdornment position="start">
                 <AccountCircle />

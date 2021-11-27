@@ -76,7 +76,7 @@ export const CreatePostForm = () => {
               // message.error("Oops! You can't create empty tweets.");
               return;
             }
-            if (!me || !me.username) {
+            if (!me || !me.email) {
               setAlert(true);
               setAlertMessage(error);
               // message.error("You must be logged in to tweet.");

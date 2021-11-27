@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     include: {
       author: {
         select: {
-          username: true,
+          email: true,
           id: true
         }
       },
@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           id: true,
           author: {
             select: {
-              username: true,
+              email: true,
               id: true
             }
           }
@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           id: true,
           author: {
             select: {
-              username: true,
+              email: true,
               id: true
             }
           }
