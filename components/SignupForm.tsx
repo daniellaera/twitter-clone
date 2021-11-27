@@ -15,9 +15,13 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { withStyles } from '@material-ui/styles';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { Avatar } from '@mui/material';
+import { Box } from '@mui/system';
 import { useState } from 'react';
 import { mutate } from 'swr';
 import { fetcher } from '../utils/fetcher';
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -129,6 +133,18 @@ export const SignupForm = () => {
             {alertMessage}
           </Alert>
         </Snackbar>
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+        <Avatar className={classes.margin} sx={{ m: 1, bgcolor: 'primary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          </Box>
         <FormControl className={classes.margin}>
           <InputLabel htmlFor="input-with-icon-adornment">Email</InputLabel>
           <Input

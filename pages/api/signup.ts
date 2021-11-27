@@ -15,6 +15,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   let user;
 
   try {
+
+    if (password.length < 8) {
+      return res.status(400).json({ error: 'Your password should have 8 characters min' });
+    }
+
     if (!validateEmail(email)) {
       return res.status(400).json({ error: 'You should provide a valid email' });
     }

@@ -86,7 +86,7 @@ export const Post = () => {
         autoHideDuration={5000}
         onClose={handleClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-        <Alert onClose={handleClose} severity="error">
+        <Alert onClose={handleClose} variant="outlined" severity="warning">
           {alertMessage}
         </Alert>
       </Snackbar>
