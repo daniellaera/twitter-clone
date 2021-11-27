@@ -1,4 +1,4 @@
-import { Grid, Tooltip } from '@material-ui/core';
+import { Grid, Snackbar, Tooltip } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
 import Card from '@material-ui/core/Card';
@@ -11,6 +11,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import moment from 'moment';
 import { useState } from 'react';
 import { mutate } from 'swr';
@@ -51,10 +52,17 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 export const Post = () => {
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alert, setAlert] = useState(false);
   const classes = useStyles();
   const { post } = usePost();
   const { me } = useMe();
+
   const [state, setState] = useState({
     raised: false,
     shadow: 1
@@ -64,9 +72,25 @@ export const Post = () => {
     return str.length > 1 ? str.substring(0, 1) + '' : str;
   };
 
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAlert(false);
+  };
+
   return post ? (
     <>
-      {post.map(({ id, author, text, createdAt, comments, likes }, i) => (
+      <Snackbar
+        open={alert}
+        autoHideDuration={5000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+        <Alert onClose={handleClose} severity="error">
+          {alertMessage}
+        </Alert>
+      </Snackbar>
+      {post.map(({ id, author, authorId, text, createdAt, comments, likes }, i) => (
         <Grid container direction="row" justifyContent="center" alignItems="center" key={i}>
           <Card
             className={classes.root}
@@ -95,9 +119,15 @@ export const Post = () => {
                     <ThumbUpIcon
                       onClick={async e => {
                         e.preventDefault();
-                        await fetcher('/api/like/create', {
-                          id
+                        const { data, error } = await fetcher('/api/like/create', {
+                          id,
+                          authorId,
+                          author
                         });
+                        if (error) {
+                          setAlertMessage(error);
+                          setAlert(true);
+                        }
                         mutate('/api/post');
                       }}
                       type="submit"

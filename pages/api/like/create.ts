@@ -4,13 +4,33 @@ import prisma from '../../../lib/prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { token } = req.cookies;
-  const { text } = req.body;
-  const { id } = req.body;
+  const { id, authorId, author } = req.body;
 
+  let likeAuthorId;
   try {
     if (token) {
       // Get authenticated user
-      const { _id, username } = jwt.verify(token, process.env.JWT_SECRET);
+      const { username } = jwt.verify(token, process.env.JWT_SECRET);
+      const me = await prisma.user.findUnique({ where: { username } });
+
+      // find all likes for this post
+      const allLikes = await prisma.like.findMany({
+        where: { postId: id }
+      });
+
+      // we map through it and we assign the like authorId to a variable
+      allLikes.map(lk => (likeAuthorId = lk.authorId));
+
+      if (me.id === authorId) {
+        // we want to avoid that the logged user likes his own post
+        return res.status(400).json({ error: 'You cannot like a post you created' });
+      }
+
+      if (likeAuthorId === me.id) {
+        // we check that the logged user id is the same as the author of this post's like
+        // and we avoid he likes the post twice
+        return res.status(400).json({ error: 'You cannot like a post twice' });
+      }
 
       const like = await prisma.like.create({
         data: {

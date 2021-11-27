@@ -1,9 +1,10 @@
 import bcrypt from 'bcrypt';
 import cookie from 'cookie';
 import jwt from 'jsonwebtoken';
+import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../lib/prisma';
 
-export default async (req, res) => {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const saltRounds = 10;
 
   // const salt = bcryptjs.genSaltSync();
@@ -64,4 +65,4 @@ export default async (req, res) => {
   // );
   // res.json(user);
   //return;
-};
+}

@@ -1,5 +1,5 @@
 import { LinearProgress } from '@material-ui/core';
-import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import { PostDetail } from '../../components/PostDetail';
 import prisma from '../../lib/prisma';
 
@@ -110,7 +110,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 };
 
 const Detail = ({ post }) => {
-  return post ? <PostDetail pst={post} id={post.id} /> : <LinearProgress />;
+  return post ? <PostDetail pst={post} id={post.id} authorId={post.authorId} /> : <LinearProgress />;
 };
 
 export default Detail;

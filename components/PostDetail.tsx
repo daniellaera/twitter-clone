@@ -27,7 +27,7 @@ import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { createStyles, withStyles } from '@material-ui/styles';
 import moment from 'moment';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { fetcher } from '../utils/fetcher';
 import { useMe } from '../utils/hooks';
 
@@ -88,13 +88,34 @@ function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export const PostDetail = ({ pst, id }) => {
+export default function useQuery() {
+  const router = useRouter();
+
+  const hasQueryParams = /\[.+\]/.test(router.route) || /\?./.test(router.asPath);
+  const ready = !hasQueryParams || Object.keys(router.query).length > 0;
+
+  if (!ready) return null;
+
+  return router.query;
+}
+
+export const PostDetail = ({ pst, id, authorId }) => {
   const classes = useStyles();
   const [input, setInput] = useState('');
   const [alert, setAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const router = useRouter();
   const { me } = useMe();
+
+  const query = useQuery();
+
+  useEffect(() => {
+    if (!query) {
+      return;
+    }
+    // fetch the dynamic page routeId
+    console.log('my query exists!!', query);
+  }, [query]);
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
