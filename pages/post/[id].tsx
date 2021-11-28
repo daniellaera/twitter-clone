@@ -67,7 +67,7 @@ import prisma from '../../lib/prisma';
 // };
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const id = Number(params.id);
+  const id = Number(params?.id);
   const matchedPost = await prisma.post.findUnique({
     where: {
       id: id
@@ -109,7 +109,51 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   };
 };
 
-const Detail = ({ post }) => {
+interface CommentProps {
+  id: number;
+  createdAt: Date;
+  text: string;
+  postId: number;
+  post: PostProps;
+  authorId: number;
+  author: AuthorProps;
+  length: any;
+  map: any;
+}
+
+interface LikeProps {
+  id: number;
+  createdAt: Date;
+  postId: number;
+  post: PostProps;
+  authorId: number;
+  author: AuthorProps;
+  length: any;
+}
+
+interface AuthorProps {
+  id: number;
+  createdAt: Date;
+  email: string;
+  password: string;
+  imageUrl: string;
+}
+
+interface PostProps {
+  id: number;
+  createdAt: Date;
+  text: string;
+  authorId: number;
+  author: AuthorProps;
+  comments: CommentProps;
+  likes: LikeProps;
+}
+
+interface PostIdProps {
+  post: PostProps;
+}
+
+const Detail = ({ post }: PostIdProps) => {
   return post ? <PostDetail pst={post} id={post.id} authorId={post.authorId} /> : <LinearProgress />;
 };
 

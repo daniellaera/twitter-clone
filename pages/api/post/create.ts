@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
     if (token) {
       // Get authenticated user
-      const { _id, email } = jwt.verify(token, process.env.JWT_SECRET);
+      const { _id, email }: any = jwt.verify(token, process.env.JWT_SECRET || '');
       const post = await prisma.post.create({
         data: {
           text,

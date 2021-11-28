@@ -3,7 +3,7 @@ import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import CommentIcon from '@material-ui/icons/Comment';
 import { withStyles } from '@material-ui/styles';
-import RouterLink from './RouterLink';
+import Link from 'next/link';
 
 const StyledBadge = withStyles((theme: Theme) =>
   createStyles({
@@ -16,14 +16,57 @@ const StyledBadge = withStyles((theme: Theme) =>
   })
 )(Badge);
 
-export const CommentButton = ({ id, comments }) => {
+interface AuthorProps {
+  id: number;
+  createdAt: Date;
+  email: string;
+  password: string;
+  imageUrl: string;
+}
+
+interface LikeProps {
+  id: number;
+  createdAt: Date;
+  postId: number;
+  post: PostProps;
+  authorId: number;
+  author: AuthorProps;
+  length: any;
+}
+interface PostProps {
+  id: number;
+  createdAt: Date;
+  text: string;
+  authorId: number;
+  author: AuthorProps;
+  comments: CommentProps;
+  likes: LikeProps;
+}
+
+interface CommentProps {
+  id: number;
+  createdAt: Date;
+  text: string;
+  postId: number;
+  post: PostProps;
+  authorId: number;
+  author: AuthorProps;
+  length: any;
+}
+
+interface CommentButtonProps {
+  id: number;
+  comments: CommentProps;
+}
+
+export const CommentButton = ({ id, comments }: CommentButtonProps) => {
   return (
-    <RouterLink tabIndex={id} href={`/post/${id}`}>
+    <Link passHref href={`/post/${id}`}>
       <IconButton aria-label="like">
         <StyledBadge badgeContent={comments?.length} color="primary">
           <CommentIcon />
         </StyledBadge>
       </IconButton>
-    </RouterLink>
+    </Link>
   );
 };

@@ -4,14 +4,14 @@ import prisma from '../../../lib/prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { token } = req.cookies;
-  const { id, authorId, author } = req.body;
+  const { id, authorId } = req.body;
 
   let likeAuthorId;
   try {
     if (token) {
       // Get authenticated user
-      const { email } = jwt.verify(token, process.env.JWT_SECRET);
-      const me = await prisma.user.findUnique({ where: { email } });
+      const { email }: any = jwt.verify(token, process.env.JWT_SECRET || '');
+      const me: any = await prisma.user.findUnique({ where: { email } });
 
       // find all likes for this post
       const allLikes = await prisma.like.findMany({

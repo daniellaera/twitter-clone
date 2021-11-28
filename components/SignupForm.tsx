@@ -22,7 +22,6 @@ import { useState } from 'react';
 import { mutate } from 'swr';
 import { fetcher } from '../utils/fetcher';
 
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -58,7 +57,7 @@ export interface PasswordState {
 
 export const SignupForm = () => {
   const classes = useStyles();
-  const [alertMessage, setAlertMessage] = useState('');
+  const [alertMessage, setAlertMessage] = useState<string>('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [login, setLogin] = useState(false);
@@ -99,18 +98,18 @@ export const SignupForm = () => {
           e.preventDefault();
           setLoading(true);
           try {
-            const { data, error } = await fetcher(`/api/${login ? 'login' : 'signup'}`, { email, password });
+            const { data, err } = await fetcher(`/api/${login ? 'login' : 'signup'}`, { email, password });
             if ((email.length === 0 && login) || (password.length === 0 && login)) {
               setError(true);
               setLoading(false);
-            } else if (error) {
+            } else if (err) {
               setAlert(true);
-              setAlertMessage(error);
+              setAlertMessage(err);
               setLoading(false);
             }
-          } catch (error) {
+          } catch (err: any) {
             setAlert(true);
-            setAlertMessage(error);
+            setAlertMessage(err);
             return;
           }
           await mutate('/api/me');
@@ -138,13 +137,12 @@ export const SignupForm = () => {
             marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-        <Avatar className={classes.margin} sx={{ m: 1, bgcolor: 'primary.main' }}>
+            alignItems: 'center'
+          }}>
+          <Avatar className={classes.margin} sx={{ m: 1, bgcolor: 'primary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
-          </Box>
+        </Box>
         <FormControl className={classes.margin}>
           <InputLabel htmlFor="input-with-icon-adornment">Email</InputLabel>
           <Input

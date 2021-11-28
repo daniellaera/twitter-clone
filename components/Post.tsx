@@ -52,6 +52,44 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+interface CommentProps {
+  id: number;
+  createdAt: Date;
+  text: string;
+  postId: number;
+  post: PostProps;
+  authorId: number;
+  author: AuthorProps;
+  length: any;
+}
+
+interface LikeProps {
+  id: number;
+  createdAt: Date;
+  postId: number;
+  post: PostProps;
+  authorId: number;
+  author: AuthorProps;
+  length: any;
+}
+
+interface AuthorProps {
+  id: number;
+  createdAt: Date;
+  email: string;
+  password: string;
+  imageUrl: string;
+}
+interface PostProps {
+  id: number;
+  createdAt: Date;
+  text: string;
+  authorId: number;
+  author: AuthorProps;
+  comments: CommentProps;
+  likes: LikeProps;
+}
+
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -90,7 +128,7 @@ export const Post = () => {
           {alertMessage}
         </Alert>
       </Snackbar>
-      {post.map(({ id, author, authorId, text, createdAt, comments, likes }, i) => (
+      {post.map(({ id, author, authorId, text, createdAt, comments, likes }: PostProps, i: number) => (
         <Grid container direction="row" justifyContent="center" alignItems="center" key={i}>
           <Card
             className={classes.root}
@@ -121,8 +159,7 @@ export const Post = () => {
                         e.preventDefault();
                         const { data, error } = await fetcher('/api/like/create', {
                           id,
-                          authorId,
-                          author
+                          authorId
                         });
                         if (error) {
                           setAlertMessage(error);

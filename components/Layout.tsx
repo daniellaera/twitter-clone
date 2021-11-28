@@ -1,7 +1,13 @@
 import Head from 'next/head';
 import { Navbar } from './Navbar';
 
-const Layout = ({ variation, onChildClick, children }) => {
+interface LayoutProps {
+  variation?: string | undefined;
+  onChildClick?: () => void;
+  children: JSX.Element;
+}
+
+const Layout = ({ variation, onChildClick, children }: LayoutProps) => {
   return (
     <>
       <Head>

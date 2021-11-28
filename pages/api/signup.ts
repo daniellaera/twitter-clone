@@ -15,17 +15,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   let user;
 
   try {
-
     if (password.length < 8) {
-      return res.status(400).json({ error: 'Your password should have 8 characters min' });
+      return res.status(400).json({ err: 'Your password should have 8 characters min' });
     }
 
     if (!validateEmail(email)) {
-      return res.status(400).json({ error: 'You should provide a valid email' });
+      return res.status(400).json({ err: 'You should provide a valid email' });
     }
 
     if (!email || !password) {
-      res.json({ error: 'You should fill the form 🖊️' });
+      res.json({ err: 'You should fill the form 🖊️' });
       return;
     }
     user = await prisma.user.create({
@@ -35,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     });
 
-    const token = jwt.sign({ email: user.email, id: user.id, time: new Date() }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ email: user.email, id: user.id, time: new Date() }, process.env.JWT_SECRET || '', {
       expiresIn: '6h'
     });
 
@@ -50,8 +49,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       })
     );
     res.json(user);
-  } catch (error) {
-    res.json({ error: 'A user with that email already exists 😮' });
+  } catch (err) {
+    res.json({ err: 'A user with that email already exists 😮' });
     return;
   }
   // const token = jwt.sign(

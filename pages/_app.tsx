@@ -4,7 +4,7 @@ import Layout from '../components/Layout';
 
 export type PaletteMode = 'light' | 'dark';
 
-export default function App({ Component, pageProps }) {
+export default function App({ Component, pageProps }: any) {
   const storage = typeof window !== 'undefined' ? localStorage.theme : 'light';
   const [storageTheme, setStorageTheme] = useState(storage);
   const colorTheme = storageTheme;

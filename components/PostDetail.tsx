@@ -99,7 +99,53 @@ export default function useQuery() {
   return router.query;
 }
 
-export const PostDetail = ({ pst, id, authorId }) => {
+interface PostProps {
+  id: number;
+  createdAt: Date;
+  text: string;
+  authorId: number;
+  author: AuthorProps;
+  comments: CommentProps;
+  likes: LikeProps;
+}
+
+interface CommentProps {
+  id: number;
+  createdAt: Date;
+  text: string;
+  postId: number;
+  post: PostProps;
+  authorId: number;
+  author: AuthorProps;
+  length: any;
+  map: any;
+}
+
+interface LikeProps {
+  id: number;
+  createdAt: Date;
+  postId: number;
+  post: PostProps;
+  authorId: number;
+  author: AuthorProps;
+  length: any;
+}
+
+interface AuthorProps {
+  id: number;
+  createdAt: Date;
+  email: string;
+  password: string;
+  imageUrl: string;
+}
+
+interface PostDetailProps {
+  id: number;
+  pst: PostProps;
+  authorId: number;
+}
+
+export const PostDetail = ({ pst, id, authorId }: PostDetailProps) => {
   const classes = useStyles();
   const [input, setInput] = useState('');
   const [alert, setAlert] = useState(false);
@@ -107,6 +153,8 @@ export const PostDetail = ({ pst, id, authorId }) => {
   const router = useRouter();
   const { me } = useMe();
 
+  // dynamic query for route to implement?
+  // check this https://github.com/vercel/next.js/issues/8259#issuecomment-650225962
   const query = useQuery();
 
   useEffect(() => {
@@ -153,9 +201,14 @@ export const PostDetail = ({ pst, id, authorId }) => {
                   <ThumbUpIcon
                     onClick={async e => {
                       e.preventDefault();
-                      await fetcher('/api/like/create', {
-                        id
+                      const { error } = await fetcher('/api/like/create', {
+                        id,
+                        authorId
                       });
+                      if (error) {
+                        setAlertMessage(error);
+                        setAlert(true);
+                      }
                       router.push(`/post/${id}`, `/post/${id}`);
                     }}
                     type="submit"
@@ -172,7 +225,7 @@ export const PostDetail = ({ pst, id, authorId }) => {
           autoHideDuration={5000}
           onClose={handleClose}
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-          <Alert onClose={handleClose} severity="warning">
+          <Alert onClose={handleClose} severity="warning" variant="outlined">
             {alertMessage}
           </Alert>
         </Snackbar>
@@ -210,7 +263,7 @@ export const PostDetail = ({ pst, id, authorId }) => {
           </IconButton>
         </Paper>
 
-        {pst.comments.map(({ id, author, text }, i) => (
+        {pst.comments.map(({ author, text }: CommentProps, i: number) => (
           <List className={classes.root} key={i}>
             <ListItem alignItems="flex-start">
               <ListItemAvatar>

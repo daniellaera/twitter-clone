@@ -6,7 +6,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { token } = req.cookies;
 
   if (token) {
-    const { id, email } = jwt.verify(token, process.env.JWT_SECRET);
+    const { id }: any = jwt.verify(token, process.env.JWT_SECRET || '');
     const me = await prisma.user.findUnique({ where: { id } });
     res.json(me);
   } else {

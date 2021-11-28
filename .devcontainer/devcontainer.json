@@ -23,7 +23,8 @@
 		"remote.containers.dotfiles.repository": "https://github.com/daniellaera/dotfiles.git",
 		"editor.codeActionsOnSave": {
 			"source.organizeImports": true
-		}
+		},
+		"workbench.editor.titleScrollbarSizing": "large"
 	},
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [

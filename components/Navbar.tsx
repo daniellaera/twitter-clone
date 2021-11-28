@@ -10,10 +10,10 @@ import FaceIcon from '@material-ui/icons/Face';
 import HomeIcon from '@material-ui/icons/Home';
 import Brightness3Icon from '@mui/icons-material/Brightness3';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import Link from 'next/link';
 import React from 'react';
 import { useMe } from '../utils/hooks';
 import { LogoutButton } from './LogoutButton';
-import RouterLink from './RouterLink';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,7 +32,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const Navbar = ({ variation, onChildClick }) => {
+interface NavbarProps {
+  variation?: string | undefined;
+  onChildClick?: () => void;
+}
+
+export const Navbar = ({ variation, onChildClick }: NavbarProps) => {
   const classes = useStyles();
   const { me } = useMe();
   if (!me) return null;
@@ -58,11 +63,11 @@ export const Navbar = ({ variation, onChildClick }) => {
           <IconButton onClick={onChildClick} edge="start" className={classes.button} color="inherit" aria-label="menu">
             {variation == 'light' ? <Brightness3Icon /> : <WbSunnyIcon />}
           </IconButton>
-          <RouterLink href={`/`}>
+          <Link href={`/`} passHref>
             <IconButton color="inherit" aria-label="menu">
               <HomeIcon />
             </IconButton>
-          </RouterLink>
+          </Link>
         </Toolbar>
       </AppBar>
     </div>
