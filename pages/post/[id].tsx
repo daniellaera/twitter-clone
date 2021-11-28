@@ -1,29 +1,82 @@
-import { LinearProgress } from '@material-ui/core';
-import { GetServerSideProps } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 import { PostDetail } from '../../components/PostDetail';
 import prisma from '../../lib/prisma';
 
 // pages/post/[id].tsx
 
-// export const getStaticPaths: GetStaticPaths = async () => {
-//   // Fetch existing posts from the database
-//   const posts = await prisma.post.findMany();
+export const getStaticPaths: GetStaticPaths = async () => {
+  // Fetch existing posts from the database
+  const posts = await prisma.post.findMany();
 
-//   // Get the paths we want to pre-render based on posts
-//   const paths = posts.map(post => ({
-//     params: { id: String(post.id) }
-//   }));
+  // Get the paths we want to pre-render based on posts
+  const paths = posts.map(post => ({
+    params: { id: String(post.id) }
+  }));
 
-//   return {
-//     paths,
-//     // If an ID is requested that isn't defined here, fallback will incrementally generate the page
-//     fallback: true
-//   };
-// };
+  return {
+    paths,
+    // If an ID is requested that isn't defined here, fallback will incrementally generate the page
+    fallback: true
+  };
+};
 
 // This also gets called at build time
-// export const getStaticProps: GetStaticProps = async ({ params }) => {
-//   const id = Number(params.id);
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const id = Number(params?.id);
+  try {
+    const matchedPost = await prisma.post.findUnique({
+      where: {
+        id: id
+      },
+      include: {
+        author: {
+          select: {
+            email: true,
+            id: true
+          }
+        },
+        likes: {
+          select: {
+            id: true,
+            author: {
+              select: {
+                email: true,
+                id: true
+              }
+            }
+          }
+        },
+        comments: {
+          select: {
+            text: true,
+            id: true,
+            author: {
+              select: {
+                email: true,
+                id: true
+              }
+            }
+          }
+        }
+      }
+    });
+    return {
+      props: { post: matchedPost }
+    };
+  } catch (error) {
+    console.error(error);
+    return { notFound: true };
+  }
+
+  // return {
+  //   props: { post: matchedPost },
+  //   revalidate: 1
+  // };
+};
+
+// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+//   const id = Number(params?.id);
 //   const matchedPost = await prisma.post.findUnique({
 //     where: {
 //       id: id
@@ -31,7 +84,7 @@ import prisma from '../../lib/prisma';
 //     include: {
 //       author: {
 //         select: {
-//           username: true,
+//           email: true,
 //           id: true
 //         }
 //       },
@@ -40,7 +93,7 @@ import prisma from '../../lib/prisma';
 //           id: true,
 //           author: {
 //             select: {
-//               username: true,
+//               email: true,
 //               id: true
 //             }
 //           }
@@ -52,7 +105,7 @@ import prisma from '../../lib/prisma';
 //           id: true,
 //           author: {
 //             select: {
-//               username: true,
+//               email: true,
 //               id: true
 //             }
 //           }
@@ -60,54 +113,11 @@ import prisma from '../../lib/prisma';
 //       }
 //     }
 //   });
+
 //   return {
-//     props: { post: matchedPost },
-//     revalidate: 1
+//     props: { post: matchedPost }
 //   };
 // };
-
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const id = Number(params?.id);
-  const matchedPost = await prisma.post.findUnique({
-    where: {
-      id: id
-    },
-    include: {
-      author: {
-        select: {
-          email: true,
-          id: true
-        }
-      },
-      likes: {
-        select: {
-          id: true,
-          author: {
-            select: {
-              email: true,
-              id: true
-            }
-          }
-        }
-      },
-      comments: {
-        select: {
-          text: true,
-          id: true,
-          author: {
-            select: {
-              email: true,
-              id: true
-            }
-          }
-        }
-      }
-    }
-  });
-  return {
-    props: { post: matchedPost }
-  };
-};
 
 interface CommentProps {
   id: number;
@@ -154,7 +164,8 @@ interface PostIdProps {
 }
 
 const Detail = ({ post }: PostIdProps) => {
-  return post ? <PostDetail pst={post} id={post.id} authorId={post.authorId} /> : <LinearProgress />;
+  const { isFallback } = useRouter();
+  return <PostDetail pst={post} id={post.id} authorId={post.authorId} />;
 };
 
 export default Detail;

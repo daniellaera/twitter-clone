@@ -8,7 +8,6 @@ import {
   Grid,
   IconButton,
   InputBase,
-  LinearProgress,
   List,
   ListItem,
   ListItemAvatar,
@@ -95,7 +94,7 @@ export default function useQuery() {
   const hasQueryParams = /\[.+\]/.test(router.route) || /\?./.test(router.asPath);
   const ready = !hasQueryParams || Object.keys(router.query).length > 0;
 
-  if (!ready) return <LinearProgress />;
+  if (!ready) return null;
 
   return router.query;
 }
