@@ -1,123 +1,123 @@
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { PostDetail } from '../../components/PostDetail';
 import prisma from '../../lib/prisma';
 
 // pages/post/[id].tsx
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  // Fetch existing posts from the database
-  const posts = await prisma.post.findMany();
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   // Fetch existing posts from the database
+//   const posts = await prisma.post.findMany();
 
-  // Get the paths we want to pre-render based on posts
-  const paths = posts.map(post => ({
-    params: { id: String(post.id) }
-  }));
+//   // Get the paths we want to pre-render based on posts
+//   const paths = posts.map(post => ({
+//     params: { id: String(post.id) }
+//   }));
 
-  return {
-    paths,
-    // If an ID is requested that isn't defined here, fallback will incrementally generate the page
-    fallback: true
-  };
-};
+//   return {
+//     paths,
+//     // If an ID is requested that isn't defined here, fallback will incrementally generate the page
+//     fallback: true
+//   };
+// };
 
 // This also gets called at build time
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const id = Number(params?.id);
-  try {
-    const matchedPost = await prisma.post.findUnique({
-      where: {
-        id: id
-      },
-      include: {
-        author: {
-          select: {
-            email: true,
-            id: true
-          }
-        },
-        likes: {
-          select: {
-            id: true,
-            author: {
-              select: {
-                email: true,
-                id: true
-              }
-            }
-          }
-        },
-        comments: {
-          select: {
-            text: true,
-            id: true,
-            author: {
-              select: {
-                email: true,
-                id: true
-              }
-            }
-          }
-        }
-      }
-    });
-    return {
-      props: { post: matchedPost }
-    };
-  } catch (error) {
-    console.error(error);
-    return { notFound: true };
-  }
-
-  // return {
-  //   props: { post: matchedPost },
-  //   revalidate: 1
-  // };
-};
-
-// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+// export const getStaticProps: GetStaticProps = async ({ params }) => {
 //   const id = Number(params?.id);
-//   const matchedPost = await prisma.post.findUnique({
-//     where: {
-//       id: id
-//     },
-//     include: {
-//       author: {
-//         select: {
-//           email: true,
-//           id: true
-//         }
+//   try {
+//     const matchedPost = await prisma.post.findUnique({
+//       where: {
+//         id: id
 //       },
-//       likes: {
-//         select: {
-//           id: true,
-//           author: {
-//             select: {
-//               email: true,
-//               id: true
+//       include: {
+//         author: {
+//           select: {
+//             email: true,
+//             id: true
+//           }
+//         },
+//         likes: {
+//           select: {
+//             id: true,
+//             author: {
+//               select: {
+//                 email: true,
+//                 id: true
+//               }
 //             }
 //           }
-//         }
-//       },
-//       comments: {
-//         select: {
-//           text: true,
-//           id: true,
-//           author: {
-//             select: {
-//               email: true,
-//               id: true
+//         },
+//         comments: {
+//           select: {
+//             text: true,
+//             id: true,
+//             author: {
+//               select: {
+//                 email: true,
+//                 id: true
+//               }
 //             }
 //           }
 //         }
 //       }
-//     }
-//   });
+//     });
+//     return {
+//       props: { post: matchedPost }
+//     };
+//   } catch (error) {
+//     console.error(error);
+//     return { notFound: true };
+//   }
 
-//   return {
-//     props: { post: matchedPost }
-//   };
+//   // return {
+//   //   props: { post: matchedPost },
+//   //   revalidate: 1
+//   // };
 // };
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const id = Number(params?.id);
+  const matchedPost = await prisma.post.findUnique({
+    where: {
+      id: id
+    },
+    include: {
+      author: {
+        select: {
+          email: true,
+          id: true
+        }
+      },
+      likes: {
+        select: {
+          id: true,
+          author: {
+            select: {
+              email: true,
+              id: true
+            }
+          }
+        }
+      },
+      comments: {
+        select: {
+          text: true,
+          id: true,
+          author: {
+            select: {
+              email: true,
+              id: true
+            }
+          }
+        }
+      }
+    }
+  });
+
+  return {
+    props: { post: matchedPost }
+  };
+};
 
 interface CommentProps {
   id: number;
